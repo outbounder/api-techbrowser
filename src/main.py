@@ -5,19 +5,21 @@ from api.save import SaveEntry
 from api.save import SaveTag
 from api.search import Search
 from api.own import Own
+from api.tags import Tags
 from api.suggest.search import Search as SearchSuggest
 from api.suggest.tags import Tags as TagsSuggest
 from api.suggest.tag import Tag as TagSuggest
 from api.resetTags import ResetTags
 
-application = webapp.WSGIApplication([('/entry.(.*)', SaveEntry),
-                                      ('/tag.(.*)', SaveTag),
-                                      ('/search.(.*)', Search),
-                                      ('/own.(.*)', Own),
-                                      ('/suggest/tags.(.*)', TagsSuggest),
-                                      ('/suggest/search.(.*)', SearchSuggest),
-                                      ('/suggest/tag.(.*)', TagSuggest),
-                                      ('/resettags.(.*)', ResetTags)
+application = webapp.WSGIApplication([('/entry\.(.*)', SaveEntry),
+                                      ('/tag\.(.*)', SaveTag),
+                                      ('/tags\.(.*)', Tags),
+                                      ('/search\.(.*)', Search),
+                                      ('/own\.(.*)', Own),
+                                      ('/suggest/tags\.(.*)', TagsSuggest),
+                                      ('/suggest/search\.(.*)', SearchSuggest),
+                                      ('/suggest/tag\.(.*)', TagSuggest),
+                                      ('/resettags\.(.*)', ResetTags)
                                      ],
                                      debug=True)
 
