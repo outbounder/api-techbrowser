@@ -15,11 +15,33 @@ class ResetTags(webapp.RequestHandler):
         tags = Tag.all().run()
         db.delete(tags)
         
-        tagNames = ["ruby","javascript","grails","python","java","csharp","nodejs","rails","php","ajax","framework",
-                    "mysql","couchdb","memcached","nosql","neo4j","groovy","mvc"]
+        tagNames = [
+            "ActionScript",
+            "AppleScript",
+            "Asp",
+            "BASIC",
+            "C",
+            "C++",
+            "Clojure",
+            "COBOL",
+            "ColdFusion",
+            "Erlang",
+            "Fortran",
+            "Groovy",
+            "Haskell",
+            "Java",
+            "JavaScript",
+            "Lisp",
+            "Perl",
+            "PHP",
+            "Python",
+            "Ruby",
+            "Scala",
+            "Scheme"
+        ]
         
         for tag in tagNames:
-            t = Tag(name=tag)
+            t = Tag(name=tag.lower())
             t.put()
             
         simplewebapp.formatResponse(format, self, "OK")

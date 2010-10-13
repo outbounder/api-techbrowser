@@ -11,7 +11,7 @@ from model import getMockupSearchQuerySuggestions
 
 class Search(webapp.RequestHandler):
     def get(self,format="json"):
-        query = self.request.get("q")
+        query = self.request.get("q").lower()
         
         resultedQueries = []
         
