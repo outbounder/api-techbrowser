@@ -1,0 +1,2 @@
+google-app-engine
+twill for functionl tests (installed via easy_install for example)
