@@ -1,6 +1,7 @@
 from urllib2 import urlopen
 
 from twill.errors import TwillAssertionError
+import ast
 
 # usage within twill : assertGet http://localhost:8080/something?asdasd
 def assertGetContains(*args):
@@ -16,14 +17,14 @@ def assertGetNotContains(*args):
     if value != False:
         raise TwillAssertionError(args[0]+" contained in response of " + args[1])
     
-# usage within twill : assertPostContains TESTVALUE http://localhost:8080/something [url: 'http://python.org', tags:['python']]
+# usage within twill : assertPostContains TESTVALUE http://localhost:8080/something url=value&url2=value2
 def assertPostContains(*args):
     content = urlopen(args[1],args[2]).read()
     value = content.find(args[0]) != -1
     if value != True: 
         raise TwillAssertionError(args[0]+" not contained in response of " + args[1])
 
-# usage within twill : assertPostNotContains TESTVALUE http://localhost:8080/something [url: 'http://python.org', tags:['python']]
+# usage within twill : assertPostNotContains TESTVALUE http://localhost:8080/something url=value&url2=value2
 def assertPostNotContains(*args):
     content = urlopen(args[1],args[2]).read()
     value = content.find(args[0]) != -1
