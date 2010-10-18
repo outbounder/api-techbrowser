@@ -1,4 +1,4 @@
 extend_with rest
 
 assertPostContains FAILED http://localhost:8080/tag.json url=http://python.org&tags=python
-assertPostContains OK http://localhost:8080/tag.json name=python3
+assertPostContains OK http://localhost:8080/tag.json name=[%=uuid()%]
