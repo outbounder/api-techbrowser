@@ -6,25 +6,21 @@ Created on Oct 12, 2010
 from google.appengine.ext import webapp
 import simplewebapp
 
-from model import getAllSearchQueries
-from model import getMockupSearchQuerySuggestions
+from model import Tag
 
 class Search(webapp.RequestHandler):
-    def get(self,format="json"):
+    def get(self, format="json"):
         query = self.request.get("q").lower()
+        if len(query) == 0:
+            simplewebapp.formatResponse(format, self, [])
+            return
         
         resultedQueries = []
         
         # this should be replaced with query to the external datastorage for suggestions
-        searchQuerySuggestions = getMockupSearchQuerySuggestions()
-        for sq in searchQuerySuggestions:
-            if sq.startswith(query):
-                resultedQueries.append(sq)
+        tags = Tag.all().run()
+        for st in tags:
+            if st.name.startswith(query):
+                resultedQueries.append(st.name)
         
-        # is this needed at all (?)
-        searchQueries = getAllSearchQueries()
-        for sq in searchQueries:
-            if sq.query.startswith(query):
-                resultedQueries.append(sq.query)
-                
-        simplewebapp.formatResponse(format,self,resultedQueries)
+        simplewebapp.formatResponse(format, self, resultedQueries)

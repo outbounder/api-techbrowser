@@ -7,21 +7,41 @@ from google.appengine.ext import webapp
 import simplewebapp
 
 from model import saveTag
+from model import saveEntry
+from model import getTagTerms 
+from model import saveOwner
 
 class SaveEntry(webapp.RequestHandler):
-    def post(self,format="json"):
+    def post(self, format="json"):
+        # TODO replace current impl. with:
         # send the entry to external datastore via databroker unit
         # check if any of given tags are unknown (not stored in local datastore)
             # check if the unknown tag has been inputed more than 2 times
                 # store the unknown tag to the local datastore
             # else
                 # record the unkown tag proposal (increase its proposal value) and store in local memcached(?)
-        simplewebapp.formatResponse(format,self,"NIY")
+                
+        url = self.request.get("url").lower()
+        tagsRaw = getTagTerms(self.request.get("tags").lower())
+        owner = self.request.get("owner").lower()
+        if saveEntry(url, owner, tagsRaw):
+            simplewebapp.formatResponse(format, self, "OK")
+        else:
+            simplewebapp.formatResponse(format, self, "FAILED")
         
 class SaveTag(webapp.RequestHandler):
-    def post(self,format="json"):
+    def post(self, format="json"):
         tagname = self.request.get("name")
-        if saveTag(tagname):
-            simplewebapp.formatResponse(format,self,"OK")
+        owner = self.request.get("owner")
+        if saveTag(tagname, owner):
+            simplewebapp.formatResponse(format, self, "OK")
         else:
-            simplewebapp.formatResponse(format,self,"FAILED")
+            simplewebapp.formatResponse(format, self, "FAILED")
+            
+class SaveOwner(webapp.RequestHandler):
+    def post(self, uid, format="json"):
+       source = self.request.get("source")
+       if saveOwner(uid, source):
+           simplewebapp.formatResponse(format, self, "OK")
+       else:
+           simplewebapp.formatResponse(format, self, "FAILED")

@@ -14,26 +14,26 @@ def assertGetContains(*args):
     content = urlopen(compileString(args[1])).read()
     value = content.find(args[0]) != -1
     if value != True:
-        raise TwillAssertionError(args[0]+" found instead "+content+" in response of " + args[1])
+        raise TwillAssertionError(content+" found instead of "+args[0]+" in response of " + args[1])
 
 # usage within twill : assertGet http://localhost:8080/something?asdasd
 def assertGetNotContains(*args):
     content = urlopen(compileString(args[1])).read()
     value = content.find(args[0]) != -1
     if value != False:
-        raise TwillAssertionError(args[0]+" found instead "+content+" in response of " + args[1])
+        raise TwillAssertionError(args[0]+" found in "+content+" in response of " + args[1])
     
 # usage within twill : assertPostContains TESTVALUE http://localhost:8080/something url=value&url2=value2
 def assertPostContains(*args):
     content = urlopen(compileString(args[1]),compileString(args[2])).read()
     value = content.find(args[0]) != -1
     if value != True: 
-        raise TwillAssertionError(args[0]+" found instead "+content+" in response of " + args[1])
+        raise TwillAssertionError(content+" found instead of "+args[0]+" in response of " + args[1])
 
 # usage within twill : assertPostNotContains TESTVALUE http://localhost:8080/something url=value&url2=value2
 def assertPostNotContains(*args):
     content = urlopen(compileString(args[1]),compileString(args[2])).read()
     value = content.find(args[0]) != -1
     if value != False: 
-        raise TwillAssertionError(args[0]+" found instead "+content+" in response of " + args[1])
+        raise TwillAssertionError(args[0]+" found in "+content+" in response of " + args[1])
 

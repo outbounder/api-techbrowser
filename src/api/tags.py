@@ -5,11 +5,11 @@ Created on Oct 12, 2010
 '''
 import simplewebapp
 from google.appengine.ext import webapp
-from model import getAllTags
+from model import Tag
 
 class Tags(webapp.RequestHandler):
     def get(self,format='json'):
-        tags = getAllTags()
+        tags = Tag.all().run()
         
         tagNames = []
         for tag in tags:
