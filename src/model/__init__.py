@@ -5,6 +5,7 @@ class Owner(db.Expando):
     source = db.StringProperty()
     createdAt = db.DateTimeProperty(auto_now_add=True)
     updatedAt = db.DateTimeProperty(auto_now=True)
+    tags = db.ListProperty(db.Key)
     
 class Entry(db.Expando):
     owner = db.ReferenceProperty(Owner)
@@ -17,6 +18,7 @@ class Entry(db.Expando):
 class Tag(db.Expando):
     name = db.StringProperty()
     owner = db.ReferenceProperty(Owner)
+    followups = db.ListProperty(db.Key)
     createdAt = db.DateTimeProperty(auto_now_add=True)
     updatedAt = db.DateTimeProperty(auto_now=True)
     
@@ -24,9 +26,13 @@ def getTagTerms(tagsLine):
     return tagsLine.split(" ") # TODO improve
 
 def saveTag(tagname, ownerUID):
-    q = Tag.all().filter("name = ", tagname).count(1)
+    q = Tag.all().filter("name = ", tagname).fetch(1)
     o = Owner.all().filter("uid =", ownerUID).fetch(1)
-    if q == 0 and len(o) == 1 and len(tagname) > 0:
+    if len(q) == 1 and len(o) == 1:
+        q[0].followups.append(o[0].key())
+        q[0].put()
+        return True
+    elif len(q) == 0 and len(o) == 1 and len(tagname) > 0:
         t = Tag(name=tagname, owner=o[0])
         t.put()
         return True

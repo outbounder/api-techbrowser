@@ -1,7 +1,16 @@
 extend_with rest
+assertGetNotContains python http://localhost:8080/search.json?q=python
+assertGetNotContains python http://localhost:8080/suggest/tags.json?url=http://python.org
+assertGetNotContains python http://localhost:8080/suggest/tag.json?q=py
+assertGetNotContains python http://localhost:8080/suggest/search.json?q=py
+assertGetNotContains python http://localhost:8080/tags.json
+assertGetNotContains python http://localhost:8080/own/myid.json
+assertGetNotContains python http://localhost:8080/own/myid.json?q=python
+assertPostNotContains OK http://localhost:8080/delete/me/myid.json source=email@.com
+assertGetContains OK http://localhost:8080/resettags.json
 assertPostContains FAILED http://localhost:8080/create/me/myid.json source=
-assertPostContains OK http://localhost:8080/create/me/myid.json source=obiwonn@gmail.com
-assertPostContains FAILED http://localhost:8080/create/me/myid.json source=obiwonn@gmail.com
+assertPostContains OK http://localhost:8080/create/me/myid.json source=email@.com
+assertPostContains FAILED http://localhost:8080/create/me/myid.json source=email@.com
 assertPostContains FAILED http://localhost:8080/entry.json url=http://python.org
 assertPostContains FAILED http://localhost:8080/entry.json url=http://python.org&tags=python
 assertPostContains OK http://localhost:8080/entry.json url=http://python.org&tags=python&owner=myid
@@ -11,6 +20,7 @@ assertPostContains OK http://localhost:8080/tag.json name=python&owner=myid
 assertPostContains OK http://localhost:8080/entry.json url=http://python2.org&tags=python&owner=myid
 assertGetNotContains python http://localhost:8080/search.json
 assertGetContains python http://localhost:8080/search.json?q=python
+assertGetContains python http://localhost:8080/search.json?q=py
 assertGetContains python http://localhost:8080/suggest/tags.json?url=http://python.org
 assertGetNotContains python http://localhost:8080/suggest/tags.json
 assertGetContains python http://localhost:8080/suggest/tag.json?q=py
@@ -22,6 +32,6 @@ assertGetContains FAILED http://localhost:8080/own/myid2.json?q=python
 assertGetContains python http://localhost:8080/own/myid.json
 assertGetContains python http://localhost:8080/own/myid.json?q=python
 assertPostContains FAILED http://localhost:8080/delete/me/myid.json source=?
-assertPostContains OK http://localhost:8080/delete/me/myid.json source=obiwonn@gmail.com
-assertPostContains FAILED http://localhost:8080/delete/me/myid.json source=obiwonn@gmail.com
+assertPostContains OK http://localhost:8080/delete/me/myid.json source=email@.com
+assertPostContains FAILED http://localhost:8080/delete/me/myid.json source=email@.com
 assertGetContains OK http://localhost:8080/resettags.json
