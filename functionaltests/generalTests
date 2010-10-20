@@ -12,12 +12,13 @@ assertPostContains FAILED http://localhost:8080/create/me/myid.json source=
 assertPostContains OK http://localhost:8080/create/me/myid.json source=email@.com
 assertPostContains FAILED http://localhost:8080/create/me/myid.json source=email@.com
 assertPostContains FAILED http://localhost:8080/entry.json url=http://python.org
-assertPostContains FAILED http://localhost:8080/entry.json url=http://python.org&tags=python
-assertPostContains OK http://localhost:8080/entry.json url=http://python.org&tags=python&owner=myid
-assertPostContains FAILED http://localhost:8080/tag.json url=http://python.org&tags=python&owner=myid
-assertPostContains FAILED http://localhost:8080/tag.json url=http://python.org&tags=python
-assertPostContains OK http://localhost:8080/tag.json name=python&owner=myid
+assertPostContains OK http://localhost:8080/entry.json url=http://python.org&tags=python
 assertPostContains OK http://localhost:8080/entry.json url=http://python2.org&tags=python&owner=myid
+assertPostContains OK http://localhost:8080/entry.json url=http://python3.org&tags=python&owner=myid2
+assertPostContains FAILED http://localhost:8080/tag.json noname=?
+assertPostContains FAILED http://localhost:8080/tag.json name=python
+assertPostContains OK http://localhost:8080/tag.json name=python&owner=myid
+assertPostContains OK http://localhost:8080/entry.json url=http://python3.org&tags=python&owner=myid
 assertGetNotContains python http://localhost:8080/search.json
 assertGetContains python http://localhost:8080/search.json?q=python
 assertGetContains python http://localhost:8080/search.json?q=py

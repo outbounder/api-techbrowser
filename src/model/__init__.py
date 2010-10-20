@@ -23,7 +23,10 @@ class Tag(db.Expando):
     updatedAt = db.DateTimeProperty(auto_now=True)
     
 def getTagTerms(tagsLine):
-    return tagsLine.split(" ") # TODO improve
+    if len(tagsLine) > 0:
+        return tagsLine.split(" ") # TODO improve
+    else:
+        return []
 
 def saveTag(tagname, ownerUID):
     q = Tag.all().filter("name = ", tagname).fetch(1)
@@ -59,15 +62,26 @@ def deleteOwner(uid, source):
 def saveEntry(url, ownerUID, tagsRaw):
     r = Entry.all().filter("url =", url).fetch(1)
     o = Owner.all().filter("uid =", ownerUID).fetch(1)
-    if len(r) == 0 and len(tagsRaw) > 0 and len(o) == 1 and len(url) > 0 and url.find("http://") != -1:
+    if len(r) == 0 and len(tagsRaw) > 0 and len(url) > 0:
         tags = []
         for t in tagsRaw:
             tag = Tag.all().filter("name =", t).fetch(1)
             if len(tag) == 1:
                 tags.append(tag[0].key())
-                
-        e = Entry(owner=o[0], tagsRaw=tagsRaw, url=url, tags=tags)
-        e.put()
+        
+        if len(ownerUID) > 0 and len(o) == 0:
+            owner = Owner(uid=ownerUID, source=ownerUID) # TODO improve
+            owner.put()
+            
+            e = Entry(owner=owner, tagsRaw=tagsRaw, url=url, tags=tags)
+            e.put()
+        elif len(ownerUID) > 0 and len(o) == 1:
+            e = Entry(owner=o[0], tagsRaw=tagsRaw, url=url, tags=tags)
+            e.put();
+        else:
+            e = Entry(tagsRaw=tagsRaw, url=url, tags=tags)
+            e.put()
+        
         return True
     else:
         return False
