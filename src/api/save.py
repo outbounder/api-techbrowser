@@ -21,6 +21,10 @@ class SaveEntry(webapp.RequestHandler):
             # else
                 # record the unkown tag proposal (increase its proposal value) and store in local memcached(?)
         url = self.request.get("url").lower()
+        if url.find("http://") == -1:
+            simplewebapp.formatResponse(format, self, "FAILED")
+            return
+        
         tagsRaw = getTagTerms(self.request.get("tags").lower())
         owner = self.request.get("owner").lower()
         if saveEntry(url, owner, tagsRaw):

@@ -11,7 +11,11 @@ from beautifulsoup.BeautifulSoup import BeautifulSoup
 from model import Tag
 
 def getTags(url):
-    content = simplerestclient.get(url)['content'].lower()
+    try:
+        content = simplerestclient.get(url)['content'].lower()
+    except:
+        content = ""
+        
     soup = BeautifulSoup(content) 
     texts = soup.findAll(text=True)
 
