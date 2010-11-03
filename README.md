@@ -80,7 +80,7 @@ Similar operation to the listSearchSuggestions but instead of givin suggestion f
 
 ## TODO/roadmap & help needed ##
 * Update readme to reflect latest operations
-* Update jsonp support with validation (http://json-p.org/)
+* Update json support with validation preventing javascript injection
 * Save operation also should take "tags" field value and include every tag which is not listed in "known tags" on every 3rd same user input.
 * Provide support for custom url parsing via external units using the "Unit Messaging" spec proposal (http://activebot.net/wiki/abn/spec)
 * Provide support for custom storage via external units using the same "Unit Messaging" spec
