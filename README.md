@@ -1,6 +1,15 @@
 # technology browser API node (working title) #
 This is unit responsible for providing jsonp or xml based communication with technology browser system.
 
+# Known ui clients #
+* http://outbounder.github.com/simplechromeaddon-techbrowser/simplechromeaddon-techbrowser.crx - chrome extension addon, only for adding new links
+* http://outbounder.github.com/simpleui-techbrowser/www/index.html - html/js web app, add and search for links by tags
+
+# Known instances #
+* http://api-techbrowser.appspot.com/
+
+# Known database endpoints #
+
 ## Usage/API ##
 
 ### General operation format ####
