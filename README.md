@@ -17,23 +17,20 @@ Operation for list own inputed technologies
 #### example ####
   GET http://api-techbrowser.appspot.com/own.<format>
 
------
-
   output: Array of techs (Arrays of key-value pairs)
+
 
 ### auto-tags generation ###
 Operation for generating tags per given url (technology). Initially uses predefined content parser and tags matching algorithm.
 #### example ####
   GET http://api-techbrowser.appspot.com/suggest/tags.<format>?url#<url>
 
------
-
   output: array of strings (tags)
+
 
 ### save ###
 Operation for adding or updating a technology to the data store.
-
-### example ###
+#### example ####
   GET http://api-techbrowser.appspot.com/entry.<jsonp>?url=http://somedomain&tags=space+delimited+tags%2fkeywords&owner=someString&callback=methodName
   POST http://api-techbrowser.appspot.com/entry.<xml|json>
   body: 
@@ -46,18 +43,15 @@ Operation for adding or updating a technology to the data store.
       }
     user: userUID (facebookID, twitterID or gmailID)
 
-  
-*Note that owner field is the only optional. If the owner value is not presented as author in the DB it will be created on first add.*
------
+  output: OK or Failed message  
 
-  output: OK or Failed message
+*Note that owner field is the only optional. If the owner value is not presented as author in the DB it will be created on first add.*
+
 
 ### search ###
 Operation used to search the data store for given query.
 #### example ####
   GET http://api-techbrowser.appspot.com/search.<format>?q#<query>&max#<number>&offset#<number>
-
------
 
   output: Array of techs (Arrays of key-value pairs)
   
@@ -67,13 +61,11 @@ Operation used to return suggestions for given search query
 #### example ###
   GET http://api-techbrowser.appspot.com/suggest/search.<format>?q#<query>&max#<number>
 
------
-
   output: Array of search suggestions queries(plain strings)
+
 
 ### listTagsNamesSuggestions ###
 Similar operation to the listSearchSuggestions but instead of givin suggestion for searching, lists suggestions for particular tags values. Output is the same format.
-
 #### example ####
   GET http://api-techbrowser.appspot.com/suggest/tag.<format>?q#<query>&max#<number>
 
