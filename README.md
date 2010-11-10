@@ -80,6 +80,7 @@ Similar operation to the listSearchSuggestions but instead of givin suggestion f
 
 
 ## TODO/roadmap & help needed ##
+* Fix saving of "https://" urls
 * Update readme to reflect latest operations
 * Update json support with validation preventing javascript injection
 * Save operation also should take "tags" field value and include every tag which is not listed in "known tags" on every 3rd same user input.
