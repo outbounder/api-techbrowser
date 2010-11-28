@@ -16,10 +16,10 @@ from api.resetTags import ResetTags
 
 application = webapp.WSGIApplication([('/entry\.(.*)', SaveEntry),
                                       ('/tag\.(.*)', SaveTag),
+                                      ('/user/(.*)/search\.(.*)', SearchOwn),
                                       ('/user/(.*)\.(.*)', SaveOwner),
                                       ('/tags\.(.*)', Tags),
                                       ('/search\.(.*)', Search),
-                                      ('/own/(.*)\.(.*)', SearchOwn),
                                       ('/suggest/tags\.(.*)', TagsSuggest),
                                       ('/suggest/search\.(.*)', SearchSuggest),
                                       ('/suggest/tag\.(.*)', TagSuggest),

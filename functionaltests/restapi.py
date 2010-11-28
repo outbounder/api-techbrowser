@@ -33,6 +33,8 @@ class restContext(object):
         
     def requestGET(self,url):
         return Resource().get(url).decodeBody()
+    def requestDELETE(self,url):
+        return Resource().delete(url).decodeBody()
     def requestPOST(self,url,data):
         return Resource().post(url,data).decodeBody()
     def requestUPLOAD(self,url,files):
@@ -53,6 +55,20 @@ def assertGetNotContains(*args):
     if restContext.verbose:
         print "GET "+restContext.compileString(args[1])
     content = restContext.requestGET(restContext.compileString(args[1]))
+    restContext.assertNotContains(args[0], content, args[1])
+    
+# usage within twill : assertGet http://localhost:8080/something?asdasd
+def assertDeleteContains(*args):
+    if restContext.verbose:
+        print "GET "+restContext.compileString(args[1])
+    content = restContext.requestDELETE(restContext.compileString(args[1]))
+    restContext.assertContains(args[0], content, args[1])
+
+# usage within twill : assertGet http://localhost:8080/something?asdasd
+def assertDeleteNotContains(*args):
+    if restContext.verbose:
+        print "GET "+restContext.compileString(args[1])
+    content = restContext.requestDELETE(restContext.compileString(args[1]))
     restContext.assertNotContains(args[0], content, args[1])
     
 # usage within twill : assertPostContains TESTVALUE http://localhost:8080/something url=value&url2=value2

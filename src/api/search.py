@@ -6,6 +6,7 @@ Created on Oct 12, 2010
 
 import simplewebapp
 from google.appengine.ext import webapp
+from google.appengine.ext import db
 from model import Entry
 from model import getTagTerms
 from model import Owner
@@ -57,15 +58,21 @@ class SearchOwn(webapp.RequestHandler):
         
         q = self.request.get("q").lower()
         if len(q) != 0:
+            ''' query = db.GqlQuery("SELECT * FROM Entry WHERE raters IN [:1]", owner.key()) ratedEntries = query.run() '''
+            query = db.GqlQuery("SELECT * FROM Entry WHERE owner = :1", owner.key())
+            ownEntries = query.run()
             tagsRaw = getTagTerms(q)
-            entries = Entry.all().filter("owner = ", owner.key()).run()
-            results = findEntries(entries, tagsRaw)
+            results = findEntries(ownEntries, tagsRaw)
             
             simplewebapp.formatResponse(format, self, results)
         else:
-            entries = Entry.all().filter("owner = ", owner.key()).run()
+            ''' query = db.GqlQuery("SELECT * FROM Entry WHERE raters IN [:1]", owner.key()) ratedEntries = query.run() '''
+            query = db.GqlQuery("SELECT * FROM Entry WHERE owner = :1", owner.key())
+            ownEntries = query.run()
+            
             results = []
-            for r in entries:
+            ''' for r in ratedEntries: results.append({'url':r.url, 'tags':r.tagsRaw}) '''
+            for r in ownEntries:
                 results.append({'url':r.url, 'tags':r.tagsRaw})
-                
+            
             simplewebapp.formatResponse(format, self, results)

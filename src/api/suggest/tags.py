@@ -6,16 +6,17 @@ Created on Oct 12, 2010
 from google.appengine.ext import webapp
 import simplewebapp
 import re
-import simplerestclient
 from beautifulsoup.BeautifulSoup import BeautifulSoup
 from model import Tag
+from rest.Urllib2Adapter import Resource
+resource = Resource()
 
 def getTags(url):
     try:
-        content = simplerestclient.get(url)['content'].lower()
+        content = resource.get(url).decodeBody().lower()
     except:
         content = ""
-        
+    
     soup = BeautifulSoup(content) 
     texts = soup.findAll(text=True)
 
@@ -41,7 +42,8 @@ def getTags(url):
 class Tags(webapp.RequestHandler):
     def get(self,format="json"):
         url = self.request.get('url')
-        if len(url) != 0:
+        
+        if url.find("http://") != -1 or url.find("https://") != -1:
             simplewebapp.formatResponse(format, self, getTags(url))
         else:
             simplewebapp.formatResponse(format, self, [])

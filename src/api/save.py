@@ -13,21 +13,15 @@ from model import saveOwner
 
 class SaveEntry(webapp.RequestHandler):
     def executeSave(self, format):
-        # TODO replace current impl. with:
-        # send the entry to external datastore via databroker unit
-        # check if any of given tags are unknown (not stored in local datastore)
-            # check if the unknown tag has been inputed more than 2 times
-                # store the unknown tag to the local datastore
-            # else
-                # record the unkown tag proposal (increase its proposal value) and store in local memcached(?)
         url = self.request.get("url").lower()
-        if url.find("http://") == -1:
+        if url.find("http://") == -1 and url.find("https://") == -1:
             simplewebapp.formatResponse(format, self, "FAILED")
             return
         
         tagsRaw = getTagTerms(self.request.get("tags").lower())
         owner = self.request.get("owner").lower()
-        if saveEntry(url, owner, tagsRaw):
+        source = self.request.get("source").lower()
+        if saveEntry(url, source, owner, tagsRaw):
             simplewebapp.formatResponse(format, self, "OK")
         else:
             simplewebapp.formatResponse(format, self, "FAILED")
