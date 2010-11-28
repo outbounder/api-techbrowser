@@ -1,4 +1,4 @@
-extend_with rest
+extend_with restapi
 assertGetNotContains python http://localhost:8080/search.json?q=python
 assertGetNotContains python http://localhost:8080/suggest/tags.json?url=http://python.org
 assertGetNotContains python http://localhost:8080/suggest/tag.json?q=py

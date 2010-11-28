@@ -1,7 +1,5 @@
-import urllib2_file
-from urllib2 import urlopen
-
 from twill.errors import TwillAssertionError
+from rest.Httplib2Adapter import Resource
 
 # singleton restcontext per extend_with 
 class restContext(object):
@@ -33,6 +31,13 @@ class restContext(object):
         if content.find(value) != -1:
             raise TwillAssertionError(value+" found in "+content+" in response of " + self.compileString(origin))
         
+    def requestGET(self,url):
+        return Resource().get(url).decodeBody()
+    def requestPOST(self,url,data):
+        return Resource().post(url,data).decodeBody()
+    def requestUPLOAD(self,url,files):
+        return Resource().post(url,files).decodeBody()
+        
 # singleton instance 
 restContext = restContext()
 
@@ -40,42 +45,42 @@ restContext = restContext()
 def assertGetContains(*args):
     if restContext.verbose:
         print "GET "+restContext.compileString(args[1])
-    content = urlopen(restContext.compileString(args[1])).read()
+    content = restContext.requestGET(restContext.compileString(args[1]))
     restContext.assertContains(args[0], content, args[1])
 
 # usage within twill : assertGet http://localhost:8080/something?asdasd
 def assertGetNotContains(*args):
     if restContext.verbose:
         print "GET "+restContext.compileString(args[1])
-    content = urlopen(restContext.compileString(args[1])).read()
+    content = restContext.requestGET(restContext.compileString(args[1]))
     restContext.assertNotContains(args[0], content, args[1])
     
 # usage within twill : assertPostContains TESTVALUE http://localhost:8080/something url=value&url2=value2
 def assertPostContains(*args):
     if restContext.verbose:
         print "POST "+restContext.compileString(args[1])+" & "+restContext.compileString(args[2])
-    content = urlopen(restContext.compileString(args[1]),restContext.compileString(args[2])).read()
+    content = restContext.requestPOST(restContext.compileString(args[1]),restContext.compileString(args[2]))
     restContext.assertContains(args[0], content, args[1])
 
 # usage within twill : assertPostNotContains TESTVALUE http://localhost:8080/something url=value&url2=value2
 def assertPostNotContains(*args):
     if restContext.verbose:
         print "POST "+restContext.compileString(args[1])+" & "+restContext.compileString(args[2])
-    content = urlopen(restContext.compileString(args[1]),restContext.compileString(args[2])).read()
+    content = restContext.requestPOST(restContext.compileString(args[1]),restContext.compileString(args[2]))
     restContext.assertNotContains(args[0], content, args[1])
 
 # usage within twill : assertUploadFileNotContains TESTVALUE http://localhost:8080/something fileName filePath
 def assertUploadFileContains(*args):
     if restContext.verbose:
         print "UPLOAD "+restContext.compileString(args[1])+" & "+restContext.compileString(args[2])+"->"+restContext.compileString(args[3])
-    data = {restContext.compileString(args[2]): open(restContext.compileString(args[3]))}
-    content = urlopen(restContext.compileString(args[1]),data).read()
+    data = {restContext.compileString(args[2]): restContext.compileString(args[3])}
+    content = restContext.requestUPLOAD(restContext.compileString(args[1]),data)
     restContext.assertContains(args[0], content, args[1])
     
 # usage within twill : assertUploadFileNotContains TESTVALUE http://localhost:8080/something fileName filePath
 def assertUploadFileNotContains(*args):
     if restContext.verbose:
         print "UPLOAD "+restContext.compileString(args[1])+" & "+restContext.compileString(args[2])+"->"+restContext.compileString(args[3])
-    data = {restContext.compileString(args[2]): open(restContext.compileString(args[3]))}
-    content = urlopen(restContext.compileString(args[1]),data).read()
+    data = {restContext.compileString(args[2]): restContext.compileString(args[3])}
+    content = restContext.requestUPLOAD(restContext.compileString(args[1]),data)
     restContext.assertNotContains(args[0], content, args[1])
