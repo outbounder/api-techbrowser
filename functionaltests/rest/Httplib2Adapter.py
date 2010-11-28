@@ -9,22 +9,29 @@ class ResourceAdapter(object):
         
         response = BaseHttpResponse(request)
         
-        conn = httplib2.Http(".cache") # timeout ?
+        conn = httplib2.Http()
         
         if request.auth != None:
             if request.auth.type == "basic":
                 conn.add_credentials(request.auth.username, request.auth.password)
             else:
                 raise TypeError('unsupported authType, possbile values: [basic]')
+            
         try:    
-            r,c = conn.request(request.url, request.method, headers=request.headers, body=request.dataParams)
+            r = None
+            c = None
+            if request.method != 'POST' and request.method != 'PUT':
+                r,c = conn.request(request.url, request.method, headers=request.headers)
+            else:
+                r,c = conn.request(request.url, request.method, headers=request.headers, body=request.dataParams)
+                
         except Exception, e:
             raise IOError("could not connect to "+request.url) # improve
         else:
             response.body = c
             response.headers = r
             response.url = request.url # with httplib2 how to get final url (after http forwards)?
-            response.status = r['status']
+            response.status = int(r['status'])
             
         return response 
     

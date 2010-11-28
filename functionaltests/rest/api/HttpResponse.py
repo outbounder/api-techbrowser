@@ -18,7 +18,7 @@ class BaseHttpResponse(object):
                     break
                 
         if charset:
-            return self.body.decode(charset, 'ignore') # 'ignore' may not be very good idea?
+            return self.body.decode(charset, 'ignore')
         else:
             return self.body
         
@@ -29,4 +29,4 @@ class JSONResponse(BaseHttpResponse):
     
 class XMLResponse(BaseHttpResponse):
     def decodeBody(self,charset):
-        return xml2obj(super(JSONResponse, self).decodeBody(charset))
+        return xml2obj(super(XMLResponse, self).decodeBody(charset))

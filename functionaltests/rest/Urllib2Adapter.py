@@ -22,13 +22,24 @@ class ResourceAdapter(object):
                     auth_handler.add_password(user=request.auth.username,
                                               passwd=request.auth.password)
                     opener = urllib2.build_opener(auth_handler)
-                    r = opener.open(urllib2.Request(request.url, request.dataParams, request.headers))  #, origin_req_host, unverifiable
+                    if request.method != 'POST' and request.method != 'PUT':
+                        r = opener.open(urllib2.Request(request.url, None, request.headers))  #, origin_req_host, unverifiable
+                    else:
+                        r = opener.open(urllib2.Request(request.url, request.dataParams, request.headers))  #, origin_req_host, unverifiable
                 else:
                     raise TypeError('unsupported authType, possbile values: [basic]')
             else:
-                r = urllib2.urlopen(urllib2.Request(request.url, request.dataParams, request.headers))  #, origin_req_host, unverifiable
+                if request.method != 'POST' and request.method != 'PUT':
+                    r = urllib2.urlopen(urllib2.Request(request.url, None, request.headers))  #, origin_req_host, unverifiable
+                else:
+                    r = urllib2.urlopen(urllib2.Request(request.url, request.dataParams, request.headers))  #, origin_req_host, unverifiable
         except IOError, e:
-            raise e # improve
+            if hasattr(e, 'reason'):
+                raise e
+            elif hasattr(e, 'code'):
+                response.status = e.code
+                response.body = e.msg
+                response.url = e.filename
         else:
             response.body = r.read()
             response.headers = r.info()

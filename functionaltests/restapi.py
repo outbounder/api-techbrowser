@@ -1,5 +1,5 @@
 from twill.errors import TwillAssertionError
-from rest.Httplib2Adapter import Resource
+from rest.Urllib2Adapter import Resource
 
 # singleton restcontext per extend_with 
 class restContext(object):

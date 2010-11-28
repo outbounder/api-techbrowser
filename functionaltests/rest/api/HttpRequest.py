@@ -5,7 +5,7 @@ class BaseHttpAuthCredentials(object):
         self.authType = authType
 
 class BaseHttpRequest(object):
-    def __init__(self, resource, method = "", url = "", headers = {}, dataParams = {},  timeout = 60*3):
+    def __init__(self, resource, method = "", url = "", dataParams = {}, headers = {}, timeout = 60*3):
         self.resource = resource
         self.url = url
         self.method = method

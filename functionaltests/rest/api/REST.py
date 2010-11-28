@@ -26,7 +26,7 @@ class HttpResource(object):
             for p in value:
                 pair = p.split("=")
                 dataParams[pair[0]] = pair[1]
-                    
+                
         return dataParams
         
     def send(self,request):
@@ -35,35 +35,29 @@ class HttpResource(object):
         if request.url.find("http://") != 0:
             request.url = self.endpoint+request.url
             
-        ''' auto encode dataParams just before sending. '''
+        ''' auto encode dataParams just before sending and append them to the URL '''
         if request.method != 'POST' and request.method != 'PUT':
-            if len(request.dataParams) > 0:
-                payloads = []
-                for d in request.dataParams:
-                    payloads.append( urllib.urlencode(d+"="+request.dataParams[d]) )
-                    
+            if len(request.dataParams.items()) > 0:
                 if request.url.find("?") == -1:
-                    request.url = urllib.urlencode(request.url+"?"+payloads.join("&"))
+                    request.url = request.url+"?"+urllib.urlencode(request.dataParams)
                 else:
-                    request.url += "&"+urllib.urlencode(payloads.join("&"))
-                
-            request.dataParams = None # clear the dataParams as they are now within the url
+                    request.url += "&"+urllib.urlencode(request.dataParams)
         else:
             request.dataParams = urllib.urlencode(request.dataParams)
         
         return self.http.send(request)
     
-    def get(self,url):
-        return self.send(BaseHttpRequest(self,"GET",url))
+    def get(self,url,data={}):
+        return self.send(BaseHttpRequest(self,"GET",url,self.getDataParamsFromValue(data)))
     
     def post(self,url,data):
         return self.send(BaseHttpRequest(self,"POST",url,self.getDataParamsFromValue(data)))
     
-    def delete(self,url):
-        return self.send(BaseHttpRequest(self,"DELETE",url))
+    def delete(self,url,data={}):
+        return self.send(BaseHttpRequest(self,"DELETE",url,self.getDataParamsFromValue(data)))
     
     def put(self,url,data):
         return self.send(BaseHttpRequest(self,"PUT",url,self.getDataParamsFromValue(data)))
     
-    def head(self,url):
-        return self.send(BaseHttpRequest(self,"HEAD",url))
+    def head(self,url,data={}):
+        return self.send(BaseHttpRequest(self,"HEAD",url,self.getDataParamsFromValue(data)))
