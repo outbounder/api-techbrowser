@@ -57,22 +57,12 @@ class SearchOwn(webapp.RequestHandler):
         owner = o[0]
         
         q = self.request.get("q").lower()
-        if len(q) != 0:
-            ''' query = db.GqlQuery("SELECT * FROM Entry WHERE raters IN [:1]", owner.key()) ratedEntries = query.run() '''
-            query = db.GqlQuery("SELECT * FROM Entry WHERE owner = :1", owner.key())
-            ownEntries = query.run()
-            tagsRaw = getTagTerms(q)
+
+        
+        query = db.GqlQuery("SELECT * FROM Entry WHERE owners = :1", owner.key()) # how to search in owners?
+        ownEntries = query.run()
+        tagsRaw = getTagTerms(q)
+        results = [] 
+        if len(q) == 0:
             results = findEntries(ownEntries, tagsRaw)
-            
-            simplewebapp.formatResponse(format, self, results)
-        else:
-            ''' query = db.GqlQuery("SELECT * FROM Entry WHERE raters IN [:1]", owner.key()) ratedEntries = query.run() '''
-            query = db.GqlQuery("SELECT * FROM Entry WHERE owner = :1", owner.key())
-            ownEntries = query.run()
-            
-            results = []
-            ''' for r in ratedEntries: results.append({'url':r.url, 'tags':r.tagsRaw}) '''
-            for r in ownEntries:
-                results.append({'url':r.url, 'tags':r.tagsRaw})
-            
-            simplewebapp.formatResponse(format, self, results)
+        simplewebapp.formatResponse(format, self, results)

@@ -40,7 +40,8 @@ Operation for adding or updating a technology to the data store. This operation 
       'owner' : "userUUID"
       'source': "sourceUUID"
       'url' : "http://somedomain",
-      'tags' : "space delimited tags"
+      'tags' : "space delimited tags",
+      'names' : "space delimited names"
 
     output: OK or Failed message
 
