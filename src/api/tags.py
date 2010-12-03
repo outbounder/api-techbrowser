@@ -6,13 +6,21 @@ Created on Oct 12, 2010
 import simplewebapp
 from google.appengine.ext import webapp
 from model import Tag
+from model import NameTag
 
 class Tags(webapp.RequestHandler):
     def get(self,format='json'):
-        tags = Tag.all().run()
-        
         tagNames = []
-        for tag in tags:
-            tagNames.append(tag.name)
+        
+        
+        tags = []
+        t = Tag.all().run()
+        for tag in t:
+            tags.append(tag.name)
             
-        simplewebapp.formatResponse(format, self, tagNames)
+        n = NameTag.all().run()
+        names = []
+        for tag in n:
+            names.append(tag.name)
+            
+        simplewebapp.formatResponse(format, self, {'tags': tags, 'names': names})

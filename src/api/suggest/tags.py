@@ -8,6 +8,7 @@ import simplewebapp
 import re
 from beautifulsoup.BeautifulSoup import BeautifulSoup
 from model import Tag
+from model import NameTag
 from rest.Urllib2Adapter import Resource
 resource = Resource()
 
@@ -30,14 +31,22 @@ def getTags(url):
     visible_texts = filter(visible, texts)
     
     resultedTags = []
+    resultedNameTags = []
+    
     tags = Tag.all().run()
     for tag in tags:
         for t in visible_texts:
             if t.find(tag.name) != -1:
                 resultedTags.append(tag.name)
                 break
+    nameTags = NameTag.all().run()
+    for tag in nameTags:
+        for t in visible_texts:
+            if t.find(tag.name) != -1:
+                resultedNameTags.append(tag.name)
+                break
             
-    return resultedTags
+    return {'tags':resultedTags, 'names':resultedNameTags}
 
 class Tags(webapp.RequestHandler):
     def get(self,format="json"):
@@ -46,4 +55,4 @@ class Tags(webapp.RequestHandler):
         if url.find("http://") != -1 or url.find("https://") != -1:
             simplewebapp.formatResponse(format, self, getTags(url))
         else:
-            simplewebapp.formatResponse(format, self, [])
+            simplewebapp.formatResponse(format, self, "FAILED")

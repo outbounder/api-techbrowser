@@ -8,6 +8,7 @@ from google.appengine.ext import db
 import simplewebapp
 
 from model import Tag
+from model import NameTag
 
 class ResetTags(webapp.RequestHandler):
     
@@ -15,7 +16,10 @@ class ResetTags(webapp.RequestHandler):
         tags = Tag.all().run()
         db.delete(tags)
         
-        tagNames = [
+        nameTags = NameTag.all().run()
+        db.delete(nameTags)
+        
+        tags = [
             "ActionScript",
             "AppleScript",
             "Asp",
@@ -40,8 +44,24 @@ class ResetTags(webapp.RequestHandler):
             "Scheme"
         ]
         
-        for tag in tagNames:
+        nameTags = [
+            "blog",
+            "wiki",
+            "howto",
+            "tutorial",
+            "library",
+            "tool",
+            "service",
+            "project",
+            "language"
+        ]
+        
+        for tag in tags:
             t = Tag(name=tag.lower())
+            t.put()
+            
+        for tag in nameTags:
+            t = NameTag(name=tag.lower())
             t.put()
             
         simplewebapp.formatResponse(format, self, "OK")

@@ -6,10 +6,8 @@ Created on Oct 12, 2010
 from google.appengine.ext import webapp
 import simplewebapp
 
-from model import saveTag
 from model import saveEntry
-from model import getTagTerms 
-from model import saveOwner
+from model import getTagTerms
 
 class SaveEntry(webapp.RequestHandler):
     def executeSave(self, format):
@@ -32,21 +30,3 @@ class SaveEntry(webapp.RequestHandler):
             
     def get(self, format="json"):
         self.executeSave(format)
-        
-class SaveTag(webapp.RequestHandler):
-    def post(self, format="json"):
-        tagname = self.request.get("name")
-        owner = self.request.get("owner")
-        if saveTag(tagname, owner):
-            simplewebapp.formatResponse(format, self, "OK")
-        else:
-            simplewebapp.formatResponse(format, self, "FAILED")
-            
-class SaveOwner(webapp.RequestHandler):
-    def post(self, uid, format="json"):
-        source = self.request.get("source")
-        if saveOwner(uid, source):
-            simplewebapp.formatResponse(format, self, "OK")
-        else:
-            simplewebapp.formatResponse(format, self, "FAILED")
-

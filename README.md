@@ -8,8 +8,6 @@ This is unit responsible for providing jsonp or xml based communication with tec
 # Known instances #
 * http://api-techbrowser.appspot.com/
 
-# Known database endpoints #
-
 ## Usage/API ##
 
 ### request uri structure ####
@@ -23,17 +21,18 @@ Operation for generating tags per given url (an Entry). Initially uses predefine
 #### example ####
     GET http://api-techbrowser.appspot.com/suggest/tags.json?url=http://bit.ly/g7H0h2
   
-    output: Array of tagnames : string
+    output: Object containing fields: {
+                                  'tags': Array of strings representing tag suggestions,
+                                  'names': Array of strings representing name suggestions
+                              }
 
 ### save url as entry ###
 Operation for adding or updating a technology to the data store. This operation does several actions behind the scenes:
   * creates owner entry*
   * creates an entry if does not exists (search is based on url)   
-  * rates an entry if already exists
-  
-*Operation in Development*
-   
-#### example ####
+  * appends the given owner to the entry if it exists
+  * any new tags or names provided are been evaluated by this operation following specific rules to be desribed in detail in different section.
+    
     GET http://api-techbrowser.appspot.com/entry/[name].jsonp?url=http://somedomain&tags=plus+delimited+tags&owner=userUUID&source=sourceUUID&callback=methodName
   
     POST http://api-techbrowser.appspot.com/entry/[name].json
@@ -49,30 +48,32 @@ Operation for adding or updating a technology to the data store. This operation 
 
 ### search own entries ###
 Operation returns not paginated list of submitted entries per owner 
-#### example ####
+
     GET http://api-techbrowser.appspot.com/user/[ownerID]/search.json?q=plus+delemited+tags
 
     output: Array of entries : {
                         url:'http://bit.ly/g7H0h2',
-                        tags:['technology','genome','project']
+                        tags:['technology','genome','project'],
+                        names:['techbrowser','technologyGenome']
                    }
                    
 Note that 'q' param is optional. if omitted then search operation will return all entries
 
 ### search public entries ###
 Operation used to search the public data store for entries containing given tags
-#### example ####
+
     GET http://api-techbrowser.appspot.com/search.json?q=plus+delemited+tags
 
     output: Array of entries : {
                         url:'http://bit.ly/g7H0h2',
-                        tags:['technology','genome','project']
+                        tags:['technology','genome','project'],
+                        names:['techbrowser','technologyGenome']
                    }
   
 
 ### get search suggestions ###
 Operation used to return suggestions upon current search.
-#### example ###
+
     GET http://api-techbrowser.appspot.com/suggest/search.json?q=term
 
     output: Array of search suggestions : string
@@ -80,28 +81,34 @@ Operation used to return suggestions upon current search.
 
 ### get tag suggestions ###
 Similar operation to the above one but instead of giving suggestion for searching, returns suggestions for particular tags values.
-#### example ####
+
     GET http://api-techbrowser.appspot.com/suggest/tag.json?q=term
+  
+    output: Array of tag suggestions : string
+    
+### get name suggestions ###
+Similar operation to the above one but instead of giving suggestion for searching, returns suggestions for particular tags values.
+
+    GET http://api-techbrowser.appspot.com/suggest/name.json?q=term
   
     output: Array of tag suggestions : string
 
 ### subscribe to event stream ###
 This operation will result in initiating http post request to given callback once internal unit event is fired.
 
-*Operation in development*
+*Operation not implemented*
+
     * onNewEntry -> Dispatched when new entry is going to be saved
     * onSearchEntries -> Dispatched when search for entries is executed
     * onNewTag -> Dispatched when new tag is added to auto-suggestion tags list
  
-#### example ####
     GET http://api-techbrowser.appspot.com/stream/subscribe/eventName.json?callback=http://myservice.com/handle
 
 ### unsubscribe to event ###
 This operation will initiate http post request to given callback once internal unit event is fired containing 'eventData'.
 
-*Operation in development* 
+*Operation not implemented* 
  
-#### example ####
     GET http://api-techbrowser.appspot.com/subscribe/eventName.json?callback=http://myservice.com/handle
 
 ## TODO/roadmap & help needed ##

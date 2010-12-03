@@ -19,8 +19,14 @@ def findEntries(entries, queryTags):
             for rt in r.tagsRaw:
                 if rt.startswith(t):
                     found = True
-                    results.append({'url':r.url, 'tags':r.tagsRaw})
+                    results.append({'url':r.url, 'tags':r.tagsRaw, 'names': r.namesRaw})
                     break
+            if not found:
+                for rt in r.namesRaw:
+                    if rt.startswith(t):
+                        found = True
+                        results.append({'url':r.url, 'tags':r.tagsRaw, 'names': r.namesRaw})
+                        break
             if found:
                 break
     return results
@@ -31,11 +37,12 @@ class Search(webapp.RequestHandler):
         results = []
         
         tagsRaw = getTagTerms(self.request.get("q").lower())
-        # improve bellow
+        
         if len(tagsRaw) == 0 or tagsRaw[0] == "": 
             simplewebapp.formatResponse(format, self, results)
             return
         
+        # VEERY SLOW ! OPTIMIZE!
         entries = Entry.all().run()
         results = findEntries(entries, tagsRaw)
                 
@@ -50,19 +57,18 @@ class SearchOwn(webapp.RequestHandler):
             return
         
         o = Owner.all().filter("uid =", ownerUID).fetch(1)
-        if len(o) == 0:
+        if len(o) != 1:
             simplewebapp.formatResponse(format, self, "FAILED")
             return
         
         owner = o[0]
         
         q = self.request.get("q").lower()
-
         
-        query = db.GqlQuery("SELECT * FROM Entry WHERE owners = :1", owner.key()) # how to search in owners?
-        ownEntries = query.run()
+        # VEERY SLOW ! OPTIMIZE!
+        ownEntries = db.GqlQuery("SELECT * FROM Entry WHERE owners = :1", owner).run()
         tagsRaw = getTagTerms(q)
         results = [] 
-        if len(q) == 0:
+        if len(q) != 0:
             results = findEntries(ownEntries, tagsRaw)
         simplewebapp.formatResponse(format, self, results)
