@@ -18,7 +18,6 @@ For clarity following examples will use json request uris
 
 ### get tag suggestions for url ###
 Operation for generating tags per given url (an Entry). Initially uses predefined content parser and tags matching algorithm.
-#### example ####
     GET http://api-techbrowser.appspot.com/suggest/tags.json?url=http://bit.ly/g7H0h2
   
     output: Object containing fields: {
