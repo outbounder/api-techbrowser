@@ -16,21 +16,32 @@ This is unit responsible for providing jsonp or xml based communication with tec
   
 For clarity following examples will use json request uris
 
-### get tag suggestions for url ###
+### get tags suggestions for url ###
 Operation for generating tags per given url (an Entry). Initially uses predefined content parser and tags matching algorithm.
     GET http://api-techbrowser.appspot.com/suggest/tags.json?url=http://bit.ly/g7H0h2
   
-    output: Object containing fields: {
-                                  'tags': Array of strings representing tag suggestions,
-                                  'names': Array of strings representing name suggestions
-                              }
+    output: Array of items: String
+    
+### get search term suggestions ###
+Operation used to return suggestions upon current search.
+
+    GET http://api-techbrowser.appspot.com/suggest/search.json?q=term
+
+    output: Array of search suggestions : string
+
+### get tag term suggestions ###
+Similar operation to the above one but instead of giving suggestion for searching, returns suggestions for particular tags values.
+
+    GET http://api-techbrowser.appspot.com/suggest/tag.json?q=term
+  
+    output: Array of tag suggestions : string
 
 ### save url as entry ###
 Operation for adding or updating a technology to the data store. This operation does several actions behind the scenes:
   * creates owner entry*
   * creates an entry if does not exists (search is based on url)   
   * appends the given owner to the entry if it exists
-  * any new tags or names provided are been evaluated by this operation following specific rules to be desribed in detail in different section.
+  * any new tags provided are been evaluated by this operation following specific rules to be desribed in detail in different section.
     
     GET http://api-techbrowser.appspot.com/entry/[name].jsonp?url=http://somedomain&tags=plus+delimited+tags&owner=userUUID&source=sourceUUID&callback=methodName
   
@@ -39,7 +50,6 @@ Operation for adding or updating a technology to the data store. This operation 
       'source': "sourceUUID"
       'url' : "http://somedomain",
       'tags' : "space delimited tags",
-      'names' : "space delimited names"
 
     output: OK or Failed message
 
@@ -52,8 +62,7 @@ Operation returns not paginated list of submitted entries per owner
 
     output: Array of entries : {
                         url:'http://bit.ly/g7H0h2',
-                        tags:['technology','genome','project'],
-                        names:['techbrowser','technologyGenome']
+                        tags:['technology','genome','project']
                    }
                    
 Note that 'q' param is optional. if omitted then search operation will return all entries
@@ -65,32 +74,8 @@ Operation used to search the public data store for entries containing given tags
 
     output: Array of entries : {
                         url:'http://bit.ly/g7H0h2',
-                        tags:['technology','genome','project'],
-                        names:['techbrowser','technologyGenome']
+                        tags:['technology','genome','project']
                    }
-  
-
-### get search suggestions ###
-Operation used to return suggestions upon current search.
-
-    GET http://api-techbrowser.appspot.com/suggest/search.json?q=term
-
-    output: Array of search suggestions : string
-
-
-### get tag suggestions ###
-Similar operation to the above one but instead of giving suggestion for searching, returns suggestions for particular tags values.
-
-    GET http://api-techbrowser.appspot.com/suggest/tag.json?q=term
-  
-    output: Array of tag suggestions : string
-    
-### get name suggestions ###
-Similar operation to the above one but instead of giving suggestion for searching, returns suggestions for particular tags values.
-
-    GET http://api-techbrowser.appspot.com/suggest/name.json?q=term
-  
-    output: Array of tag suggestions : string
 
 ### subscribe to event stream ###
 This operation will result in initiating http post request to given callback once internal unit event is fired.

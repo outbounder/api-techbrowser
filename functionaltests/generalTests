@@ -9,24 +9,19 @@ assertGetContains FAILED http://localhost:8080/entry.jsonp?url=
 assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org
 assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=python
 assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=python&owner=myid
-assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&names=python
-assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&names=python+name1
-assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1+tag2+tag3&names=name2+name3&owner=myid
-assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1&names=name1&owner=myid2
-assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1&names=name1&owner=myid3
-assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1&names=name1&owner=myid4
-assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1&names=name1&owner=myid5
+assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1+tag2+tag3&owner=myid
+assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1+tag2&owner=myid2
+assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1+tag2&owner=myid3
+assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1+tag2&owner=myid4
+assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tags=tag1+tag2&owner=myid5
 
 assertGetContains python http://localhost:8080/tags.json
 assertGetContains tag1 http://localhost:8080/tags.json
-assertGetContains name1 http://localhost:8080/tags.json
 
 assertGetContains [] http://localhost:8080/suggest/search.json
 assertGetContains python http://localhost:8080/suggest/search.json?q=py
-assertGetContains name1 http://localhost:8080/suggest/search.json?q=name
 
 assertGetContains [] http://localhost:8080/suggest/name.json
-assertGetContains name1 http://localhost:8080/suggest/name.json?q=name
 
 assertGetContains [] http://localhost:8080/suggest/tag.json
 assertGetContains python http://localhost:8080/suggest/tag.json?q=py
@@ -36,10 +31,7 @@ assertGetContains [] http://localhost:8080/search.json
 assertGetContains python http://localhost:8080/search.json?q=python
 assertGetContains python http://localhost:8080/search.json?q=py
 assertGetContains python http://localhost:8080/search.json?q=tag1
-assertGetContains python http://localhost:8080/search.json?q=name1
-assertGetContains python http://localhost:8080/search.json?q=name2
 
 assertGetContains FAILED http://localhost:8080/user/myidNotExisting/search.json?q=python
 assertGetContains python http://localhost:8080/user/myid2/search.json?q=py
 assertGetContains python http://localhost:8080/user/myid2/search.json?q=tag1
-assertGetContains python http://localhost:8080/user/myid2/search.json?q=name1

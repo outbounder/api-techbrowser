@@ -8,7 +8,6 @@ from api.tags import Tags
 from api.suggest.search import Search as SearchSuggest
 from api.suggest.tags import Tags as TagsSuggest
 from api.suggest.tag import Tag as TagSuggest
-from api.suggest.name import NameTag as NameTagSuggest
 from api.resetTags import ResetTags
 
 
@@ -19,7 +18,6 @@ application = webapp.WSGIApplication([('/entry\.(.*)', SaveEntry),
                                       ('/suggest/tags\.(.*)', TagsSuggest),
                                       ('/suggest/search\.(.*)', SearchSuggest),
                                       ('/suggest/tag\.(.*)', TagSuggest),
-                                      ('/suggest/name\.(.*)', NameTagSuggest),
                                       ('/resettags\.(.*)', ResetTags)
                                      ],
                                      debug=True)
