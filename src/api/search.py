@@ -19,14 +19,8 @@ def findEntries(entries, queryTags):
             for rt in r.tagsRaw:
                 if rt.startswith(t):
                     found = True
-                    results.append({'url':r.url, 'tags':r.tagsRaw, 'names': r.namesRaw})
+                    results.append({'url':r.url, 'tagsRaw':r.tagsRaw})
                     break
-            if not found:
-                for rt in r.namesRaw:
-                    if rt.startswith(t):
-                        found = True
-                        results.append({'url':r.url, 'tags':r.tagsRaw, 'names': r.namesRaw})
-                        break
             if found:
                 break
     return results
