@@ -17,10 +17,9 @@ class SaveEntry(webapp.RequestHandler):
             return
         
         tags = getTagTerms(self.request.get("tags").lower())
-        names = getTagTerms(self.request.get("names").lower())
         owner = self.request.get("owner").lower()
         source = self.request.get("source").lower()
-        if saveEntry(url, source, owner, tags, names):
+        if saveEntry(url, source, owner, tags):
             simplewebapp.formatResponse(format, self, "OK")
         else:
             simplewebapp.formatResponse(format, self, "FAILED")

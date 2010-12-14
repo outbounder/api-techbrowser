@@ -17,16 +17,6 @@ class ResetTags(webapp.RequestHandler):
         db.delete(tags)
         
         firstLevelTags = [
-            'framework',
-            'tool',
-            'wiki',
-            'tutorial',
-            'howto',
-            'library',
-            'service',
-            'language']
-        
-        secondLevelTags = [
             "ActionScript",
             "Asp",
             "BASIC",
@@ -48,14 +38,21 @@ class ResetTags(webapp.RequestHandler):
             "Ruby",
             "Scala",
             "Scheme",
-            "haxe"
+            "haxe",
+            "nodejs",
+            'framework',
+            'tool',
+            'wiki',
+            'tutorial',
+            'howto',
+            'library',
+            'service',
+            'language'
         ]
         
         for tag in firstLevelTags:
             t = Tag(name=tag.lower())
             t.put()
-            for st in secondLevelTags:
-                saveTag(st.lower(),None, t)
             
         simplewebapp.formatResponse(format, self, "OK")
         

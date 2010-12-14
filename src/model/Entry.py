@@ -18,7 +18,7 @@ class Entry(db.Expando):
     createdAt = db.DateTimeProperty(auto_now_add=True)
     updatedAt = db.DateTimeProperty(auto_now=True)
 
-def saveEntry(url, sourceUUID, ownerUID, tagsList, name):
+def saveEntry(url, sourceUUID, ownerUID, tagsList):
     r = Entry.all().filter("url =", url).fetch(1)
     o = Owner.all().filter("uid =", ownerUID).fetch(1)
     

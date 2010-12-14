@@ -5,18 +5,15 @@ Created on Oct 12, 2010
 '''
 import simplewebapp
 from google.appengine.ext import webapp
-from model import getTags
+from model import Tag
 
-def getTagsNamedTree(parent=None):
-    node = {'name':'root','nodes':[]};
-    if parent != None:
-        node['name'] = parent.name
-    t = getTags(parent)
-    for i in t:
-        ir = getTagsNamedTree(i)
-        node['nodes'].append(ir)
-    return node
+def getTags():
+    result = []
+    tags = Tag.all()
+    for i in tags:
+        result.append(i.name)
+    return result
 
 class Tags(webapp.RequestHandler):
     def get(self,format='json'):
-        simplewebapp.formatResponse(format, self, getTagsNamedTree())
+        simplewebapp.formatResponse(format, self, getTags())
