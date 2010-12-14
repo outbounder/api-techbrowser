@@ -18,14 +18,11 @@ assertGetContains OK http://localhost:8080/entry.jsonp?url=http://python.org&tag
 assertGetContains python http://localhost:8080/tags.json
 assertGetContains tag1 http://localhost:8080/tags.json
 
-assertGetContains [] http://localhost:8080/suggest/search.json
-assertGetContains python http://localhost:8080/suggest/search.json?q=py
-
-assertGetContains [] http://localhost:8080/suggest/name.json
+assertGetContains tag1 http://localhost:8080/suggest/tags.json?url=http://python.org
 
 assertGetContains [] http://localhost:8080/suggest/tag.json
 assertGetContains python http://localhost:8080/suggest/tag.json?q=py
-assertGetContains tag1 http://localhost:8080/suggest/tag.json?q=tag1
+assertGetContains tag1 http://localhost:8080/suggest/tag.json?q=tag
 
 assertGetContains [] http://localhost:8080/search.json
 assertGetContains python http://localhost:8080/search.json?q=python

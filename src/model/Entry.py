@@ -43,13 +43,32 @@ def saveEntry(url, sourceUUID, ownerUID, tagsList):
             
         return True
     else:
-        # TODO implement entry's tags update logic 
+        # append new owner
         found = False
         for n in r[0].owners:
             if n == owner:
                 found = True
         if not found and owner != None:        
             r[0].owners.append(owner.key());
+            
+        # append new rawTags
+        for n in tagsList:
+            found = False
+            for t in r[0].tagsRaw:
+                if n == t:
+                    found = True
+            if not found:
+                r[0].tagsRaw.append(n)
+                
+        # append new tags
+        tags = getTagKeys(owner, tagsList)
+        for n in tags:
+            found = False
+            for t in r[0].tags:
+                if n == t:
+                    found = True
+            if not found:
+                r[0].tags.append(n)
             
         r[0].put()
         return True

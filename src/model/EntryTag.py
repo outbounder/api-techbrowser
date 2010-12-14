@@ -21,7 +21,7 @@ class TagProposal(db.Expando):
     updatedAt = db.DateTimeProperty(auto_now=True)
     
 def saveTag(tagname, owner):
-    q = db.GqlQuery("SELECT * FROM Tag WHERE  AND name = :2 LIMIT 1", tagname).fetch(1)
+    q = db.GqlQuery("SELECT * FROM Tag WHERE name = :1 LIMIT 1", tagname).fetch(1)
     
     if len(q) == 0 and len(tagname) > 0:
         t = Tag(name=tagname)
@@ -32,7 +32,7 @@ def saveTag(tagname, owner):
         return q[0]
     
 def saveTagProposal(tagname, owner):
-    q = db.GqlQuery("SELECT * FROM TagProposal WHERE name = :2 LIMIT 1", tagname).fetch(1)
+    q = db.GqlQuery("SELECT * FROM TagProposal WHERE name = :1 LIMIT 1", tagname).fetch(1)
     
     if len(q) == 0 and len(tagname) > 0:
         t = TagProposal(name=tagname)
@@ -45,14 +45,14 @@ def saveTagProposal(tagname, owner):
         return q[0]
     
 def getTag(tagname):
-    r = db.GqlQuery("SELECT * FROM Tag WHERE parents_count = 0 AND name = :1", tagname).fetch(1)
+    r = db.GqlQuery("SELECT * FROM Tag WHERE name = :1", tagname).fetch(1)
     if len(r) > 0:
         return r[0]
     else:
         return None
 
 def getTagProposal(tagname):
-    r = db.GqlQuery("SELECT * FROM TagProposal WHERE parents_count = 0 AND name = :1", tagname).fetch(1)
+    r = db.GqlQuery("SELECT * FROM TagProposal WHERE name = :1", tagname).fetch(1)
     if len(r) > 0:
         return r[0]
     else:

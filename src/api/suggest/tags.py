@@ -8,6 +8,7 @@ import simplewebapp
 import re
 from beautifulsoup.BeautifulSoup import BeautifulSoup
 from model import Tag
+from model import Entry
 from rest.Urllib2Adapter import Resource
 resource = Resource()
 
@@ -39,7 +40,21 @@ def getTagsForUrl(url):
     visible_texts = filter(visible, texts)
     visibleText = " ".join(visible_texts)
     
-    return getTagsProposalsForText(visibleText)
+    result = getTagsProposalsForText(visibleText)
+    
+    entry = Entry.all().filter("url =", url).fetch(1)
+    if len(entry) > 0:
+        entryStableTags = entry[0].tags
+        for t in entryStableTags:
+            found = False
+            name = Tag.get(t).name
+            for r in result:
+                if name == r:
+                    found = True
+            if not found:
+                result.append(name)
+                
+    return result
 
 
 class Tags(webapp.RequestHandler):
