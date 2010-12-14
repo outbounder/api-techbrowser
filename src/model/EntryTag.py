@@ -84,7 +84,7 @@ def registerTags(owner, tagsRawArray):
             else:
                 tp = saveTagProposal(t, owner)
     
-def getTagKeys(owner, tagsRawArray):
+def getTagKeys(tagsRawArray):
     tagKeys = []
     for t in tagsRawArray:
         tagMatch = getTag(t)

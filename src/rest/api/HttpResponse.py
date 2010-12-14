@@ -1,6 +1,3 @@
-import json
-import xml2obj
-
 class BaseHttpResponse(object):
     def __init__(self,request,url='',status=0,headers={},body=''):
         self.request = request
@@ -21,12 +18,3 @@ class BaseHttpResponse(object):
             return self.body.decode(charset, 'ignore')
         else:
             return self.body
-        
-        
-class JSONResponse(BaseHttpResponse):
-    def decodeBody(self,charset):
-        return json.loads(super(JSONResponse, self).decodeBody(charset))
-    
-class XMLResponse(BaseHttpResponse):
-    def decodeBody(self,charset):
-        return xml2obj(super(XMLResponse, self).decodeBody(charset))

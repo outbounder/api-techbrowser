@@ -36,7 +36,7 @@ def saveEntry(url, sourceUUID, ownerUID, tagsList):
         if owner != None:
             owners = [owner.key()]
             
-        tags = getTagKeys(owner, tagsList)
+        tags = getTagKeys(tagsList)
             
         e = Entry(owners=owners, url=url, tagsRaw=tagsList, tags=tags)
         e.put()
@@ -61,7 +61,7 @@ def saveEntry(url, sourceUUID, ownerUID, tagsList):
                 r[0].tagsRaw.append(n)
                 
         # append new tags
-        tags = getTagKeys(owner, tagsList)
+        tags = getTagKeys(tagsList)
         for n in tags:
             found = False
             for t in r[0].tags:

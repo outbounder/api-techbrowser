@@ -14,21 +14,20 @@ from model import Owner
 def findEntries(entries, queryTags):
     results = []
     for r in entries:
+        
         for index,t in enumerate(queryTags):
-            found = False
+            match = False
             for rt in r.tagsRaw:
-                if index == len(queryTags)-1:
-                    if rt.startswith(t):
-                        found = True
-                        results.append({'url':r.url, 'tagsRaw':r.tagsRaw})
-                        break
-                else:
-                    if rt == t:
-                        found = True
-                        results.append({'url':r.url, 'tagsRaw':r.tagsRaw})
-                        break
-            if found:
+                if rt == t and index != len(queryTags)-1:
+                    match = True
+                elif rt.startswith(t):
+                    match = True
+            if match == False:
                 break
+                
+        if match == True:
+            results.append({'url':r.url, 'tagsRaw': r.tagsRaw})
+        
     return results
 
 class Search(webapp.RequestHandler):

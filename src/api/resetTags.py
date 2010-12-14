@@ -9,6 +9,8 @@ import simplewebapp
 
 from model import Tag
 from model import saveTag
+from model import Entry
+from model import getTagKeys
 
 class ResetTags(webapp.RequestHandler):
     
@@ -53,6 +55,12 @@ class ResetTags(webapp.RequestHandler):
         for tag in firstLevelTags:
             t = Tag(name=tag.lower())
             t.put()
+            
+        entries = Entry.all()
+        for e in entries:
+            newtags = getTagKeys(e.tagsRaw)
+            e.tags = newtags
+            e.put()
             
         simplewebapp.formatResponse(format, self, "OK")
         
