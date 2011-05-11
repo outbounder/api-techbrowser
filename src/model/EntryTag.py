@@ -42,6 +42,8 @@ def saveTagProposal(tagname, owner):
         t.put()
         return t
     else:
+        q[0].owner = owner
+        q[0].name = tagname
         return q[0]
     
 def getTag(tagname):
@@ -79,7 +81,7 @@ def registerTags(owner, tagsRawArray):
                     
                 tp.put()
                     
-                if len(tp.raters) + tp.anonymousRaters > 3:
+                if len(tp.raters) + tp.anonymousRaters > 0:
                     tp = saveTag(tp.name, tp.owner)
             else:
                 tp = saveTagProposal(t, owner)
@@ -90,7 +92,5 @@ def getTagKeys(tagsRawArray):
         tagMatch = getTag(t)
         if tagMatch != None:
             tagKeys.append(tagMatch.key())
-        else:
-            return tagKeys
                 
     return tagKeys

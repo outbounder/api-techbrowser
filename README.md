@@ -41,18 +41,6 @@ For clarity following examples will use json request uris
 *Note that 'owner' and 'source' fields are optional. If the owner value does not exists in the DB it will be created only once.
 *Note that when given tag value has been used more than 3 times it gets saved in the tags list used for suggestions.
 
-### search own entries ###
-Operation returns not paginated list of submitted entries per owner 
-
-    GET http://api-techbrowser.appspot.com/user/[ownerID]/search.json?q=plus+delemited+tags
-
-    output: Array of entries : {
-                        url:'http://bit.ly/g7H0h2',
-                        tags:['technology','genome','project']
-                   }
-                   
-Note that 'q' param is optional. if omitted then search operation will return all entries.
-
 ### search public entries ###
 Operation used to search the public data store for entries containing given tags
 
@@ -63,25 +51,10 @@ Operation used to search the public data store for entries containing given tags
                         tags:['technology','genome','project']
                    }
 
-### subscribe to event stream ###
-This operation will result in initiating http post request to given callback once internal unit event is fired.
 
-*Operation not implemented*
+### synch external tags ###
+Operation is used to force synching between current techbrowser db instance and the one given by url param. Only new tags will be added and returned as response.
 
-    * onNewEntry -> Dispatched when new entry is going to be saved
-    * onSearchEntries -> Dispatched when search for entries is executed
-    * onNewTag -> Dispatched when new tag is added to auto-suggestion tags list
- 
-    GET http://api-techbrowser.appspot.com/stream/subscribe/eventName.json?callback=http://myservice.com/handle
+    GET http://localhost:8080/synch.json?url=http://api-techbrowser.appspot.com/tags.json
 
-### unsubscribe to event ###
-This operation will initiate http post request to given callback once internal unit event is fired containing 'eventData'.
-
-*Operation not implemented* 
- 
-    GET http://api-techbrowser.appspot.com/subscribe/eventName.json?callback=http://myservice.com/handle
-
-## TODO/roadmap & help needed ##
-  * upgrade unit & functional tests accordingly to the api
-  * add api versioning support
-  * provide user data management api or extern to separate unit
+    output: Array of tag names : string

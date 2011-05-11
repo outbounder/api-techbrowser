@@ -8,6 +8,7 @@ from api.tags import Tags
 from api.suggest.tags import Tags as TagsSuggest
 from api.suggest.tag import Tag as TagSuggest
 from api.resetTags import ResetTags
+from api.synchTags import SynchTags
 
 
 application = webapp.WSGIApplication([('/entry\.(.*)', SaveEntry),
@@ -16,7 +17,7 @@ application = webapp.WSGIApplication([('/entry\.(.*)', SaveEntry),
                                       ('/search\.(.*)', Search),
                                       ('/suggest/tags\.(.*)', TagsSuggest),
                                       ('/suggest/tag\.(.*)', TagSuggest),
-                                      ('/resettags\.(.*)', ResetTags)
+                                      ('/TAGS/fetch\.(.*)', SynchTags)
                                      ],
                                      debug=True)
 
