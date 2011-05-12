@@ -17,7 +17,7 @@ application = webapp.WSGIApplication([('/entry\.(.*)', SaveEntry),
                                       ('/search\.(.*)', Search),
                                       ('/suggest/tags\.(.*)', TagsSuggest),
                                       ('/suggest/tag\.(.*)', TagSuggest),
-                                      ('/TAGS/fetch\.(.*)', SynchTags)
+                                      ('/synchTags\.(.*)', SynchTags)
                                      ],
                                      debug=True)
 
