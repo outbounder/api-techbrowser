@@ -1,23 +1,25 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from api.save import SaveEntry
-from api.search import Search
-from api.search import SearchOwn
-from api.tags import Tags
+from api.entries.save import SaveEntry
+from api.entries.search import SearchEntries
+from api.tags.search import SearchTags
+from api.tags.get import Tags
 from api.suggest.tags import Tags as TagsSuggest
 from api.suggest.tag import Tag as TagSuggest
-from api.resetTags import ResetTags
-from api.synchTags import SynchTags
+from api.tags.synch import SynchTags
+from api.tags.recordMismatch import RecordMismatch
 
 
-application = webapp.WSGIApplication([('/entry\.(.*)', SaveEntry),
-                                      ('/user/(.*)/search\.(.*)', SearchOwn),
+application = webapp.WSGIApplication([
+                                      ('/entry\.(.*)', SaveEntry),
                                       ('/tags\.(.*)', Tags),
-                                      ('/search\.(.*)', Search),
+                                      ('/search\.(.*)', SearchEntries),
+                                      ('/searchTags\.(.*)', SearchTags),
                                       ('/suggest/tags\.(.*)', TagsSuggest),
                                       ('/suggest/tag\.(.*)', TagSuggest),
-                                      ('/synchTags\.(.*)', SynchTags)
+                                      ('/synchTags\.(.*)', SynchTags),
+                                      ('/recordTagMismatch\.(.*)', RecordMismatch)
                                      ],
                                      debug=True)
 

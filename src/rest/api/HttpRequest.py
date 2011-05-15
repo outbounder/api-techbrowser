@@ -9,6 +9,10 @@ class BaseHttpRequest(object):
         self.resource = resource
         self.url = url
         self.method = method
+        if not 'User-Agent' in headers:
+            headers['User-Agent'] = "Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.50 Safari/534.24"
+        if not 'Accept' in headers:
+            headers['Accept'] = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
         self.headers = headers
         self.dataParams = dataParams
         self.timeout = timeout

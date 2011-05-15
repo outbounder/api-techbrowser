@@ -3,11 +3,13 @@ Created on Oct 12, 2010
 
 @author: outbounder
 '''
+from logging import Logger
 from google.appengine.ext import webapp
 import simplewebapp
 import re
 from beautifulsoup.BeautifulSoup import BeautifulSoup
 from model import Tag
+from model import excludeMismatches
 from model import Entry
 from rest.Urllib2Adapter import Resource
 resource = Resource()
@@ -18,7 +20,9 @@ def getTagsProposalsForText(text):
     for tag in tags:
         if re.search(r'\b'+re.escape(tag.name)+r'\b',text):
             result.append(tag.name)
-        
+    
+    result = excludeMismatches(result)
+    
     return result
 
 def getTagsForUrl(url):
@@ -59,8 +63,8 @@ def getTagsForUrl(url):
 
 class Tags(webapp.RequestHandler):
     def get(self,format="json"):
-        url = self.request.get('url')
         
+        url = self.request.get('url')
         if url.find("http://") != -1 or url.find("https://") != -1:
             simplewebapp.formatResponse(format, self, getTagsForUrl(url))
         else:

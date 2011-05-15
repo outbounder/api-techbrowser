@@ -30,7 +30,7 @@ def findEntries(entries, queryTags):
         
     return results
 
-class Search(webapp.RequestHandler):
+class SearchEntries(webapp.RequestHandler):
     
     def get(self, format="json"):
         results = []
@@ -41,8 +41,8 @@ class Search(webapp.RequestHandler):
             simplewebapp.formatResponse(format, self, results)
             return
         
-        # VEERY SLOW ! OPTIMIZE!
-        entries = Entry.all().run()
+        # EXTREMELY SLOW ! OPTIMIZE!
+        entries = Entry.all().order("-updatedAt").run()
         results = findEntries(entries, tagsRaw)
                 
         simplewebapp.formatResponse(format, self, results)
