@@ -2,13 +2,15 @@ import re
 from MVCEngine import Controller
 from MVCEngine import RenderString
 from simplejson import JSONEncoder
-from numbers import Number
+
 
 valid_callback = re.compile('^\w+(\.\w+)*$')
 XML_CONTENT_TYPE = "application/xml"
 JSON_CONTENT_TYPE = "application/json"
 PLAIN_CONTENT_TYPE = "text/javascript"
 JSONP_CALLBACKNAME = "callback"
+
+import logging
 
 from mimetypes import MimeTypes
 mimetypes = MimeTypes()
@@ -60,18 +62,12 @@ class RenderResponse(RenderString):
 
     def writeResponseAsXML(self, data):
         self.context.response.headers["Content-Type"] = XML_CONTENT_TYPE
-        if isinstance(data, str) or isinstance(data, Number):
+        if isinstance(data, str) or isinstance(data, int) or isinstance(data, float):
             doc = "<object>" + data + "</object>"
             self.context.response.out.write(doc)
         else:
             doc = parse_doc(data)
             self.context.response.out.write(doc.toprettyxml(encoding="utf-8", indent="  ")) 
-
-import sys
-import json
-import traceback
-import getopt
-import numbers
 
 from xml.dom.minidom import Document
 
@@ -97,7 +93,7 @@ def parse_element(doc, root, j):
   elif isinstance(j, str) or isinstance(j, unicode):
     text = doc.createTextNode(j)
     root.appendChild(text)
-  elif isinstance(j, numbers.Number):
+  elif isinstance(j, int) or isinstance(j, float):
     text = doc.createTextNode(str(j))
     root.appendChild(text)
   else:

@@ -7,6 +7,7 @@ import os
 import sys
 import itertools
 from google.appengine.ext.webapp.util import run_wsgi_app
+from libs import simplejson
 
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -723,6 +724,8 @@ class MVCContext(HttpVerbs):
             self.flash = MVCContext.FlashCollection()
 
         routes = router.resolve(request_url)
+        logging.debug(request_url)
+        logging.debug(simplejson.JSONEncoder().encode(routes))
         if routes is not None:
             self.controller = routes['controller']
             self.action = routes['action']
@@ -872,8 +875,9 @@ class MVCEngine(webapp.RequestHandler):
             logging.info("Could not find app/app.py")
         except AttributeError:
             logging.info("Could not find app class")
-
-    def __init__(self):
+    
+    @staticmethod     
+    def append_paths():
         from django.conf import settings
         if settings.ROOTDIR : 
             root = settings.ROOTDIR
@@ -892,6 +896,7 @@ class MVCEngine(webapp.RequestHandler):
             os.path.join(os.path.dirname(root), 'app', 'models'),
             os.path.join(os.path.dirname(root), 'app')
         ]
+        
         for path in paths:
             if os.path.exists(path):
                 # Don't add paths that don't exist. It is entirely possible that
@@ -899,14 +904,9 @@ class MVCEngine(webapp.RequestHandler):
                 # applications might not use them
                 sys.path.append(path)
 
-        # Load the custom tags library. Since this component is optional, check that it
-        # exists before loading it.
-        from google.appengine.ext.webapp import template
-        custom_tag_library_path = os.path.join(os.path.dirname(root), 'app', 'tags')
-        tags_files = [x.split('.')[0] for x in os.listdir(custom_tag_library_path) if x.endswith('.py') and not x.startswith('_')]
-        for each_tags_file in tags_files:
-            template.register_template_library('tags.%s' % each_tags_file)
-
+    def __init__(self):
+        MVCEngine.append_paths()
+         
         # Load the app class, so we can use it where needed.
         self.app_class = MVCEngine.__load_app_class()
 
@@ -944,10 +944,11 @@ class MVCEngine(webapp.RequestHandler):
         controller_name = context.controller + "_controller"
 
         controller = None
-        try:
-            controller = __import__(controller_name)
-        except ImportError:
-            pass
+        #try:
+        controller = __import__(controller_name,globals(),locals())
+        #except ImportError:
+        #    logging.error("controller not found "+controller_name)
+        #    pass
 
         if controller is not None:
             # Run the load method from app.py.
