@@ -45,7 +45,7 @@ class entries_controller(RestController):
         # EXTREMELY SLOW ! OPTIMIZE!
         results = Entry.matchByTags(tagsRaw)
                 
-        RenderResponse(self.context, results)
+        return RenderResponse(self.context, results)
     
     def submit(self, url, tags):
         url = url.lower()

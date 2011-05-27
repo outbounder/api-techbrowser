@@ -1631,11 +1631,11 @@ class Dispatcher(webapp.RequestHandler):
     def doc_to_output(self, doc):
         out_mime_type = self.request.accept.best_match([JSON_CONTENT_TYPE, XML_CONTENT_TYPE])
         if(out_mime_type == JSON_CONTENT_TYPE or 
-            (self.readUrlExtensionAsContentType and mimetypes.guess_type(self.request.url)[0]==JSON_CONTENT_TYPE)):
+            (self.readUrlExtensionAsContentType and mimetypes.guess_type(self.request.path)[0]==JSON_CONTENT_TYPE)):
             self.response.disp_out_type_ = JSON_CONTENT_TYPE
             return xml_to_json(doc)
         elif(out_mime_type == XML_CONTENT_TYPE or
-             (self.readUrlExtensionAsContentType and mimetypes.guess_type(self.request.url)[0]==XML_CONTENT_TYPE)):
+             (self.readUrlExtensionAsContentType and mimetypes.guess_type(self.request.path)[0]==XML_CONTENT_TYPE)):
             self.response.disp_out_type_ = XML_CONTENT_TYPE
             return doc.toxml(XML_ENCODING)
         self.response.disp_out_type_ = XML_CONTENT_TYPE

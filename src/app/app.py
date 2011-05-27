@@ -1,5 +1,3 @@
-from MVCEngine import MVCContext
-
 class App(object):
     def routes(self, router):
         # The application should have all of its routes defined here.
@@ -23,4 +21,3 @@ class App(object):
         # requested controller. If it returns an ActionResult, that result will be rendered
         # as normal.
 		pass
-    

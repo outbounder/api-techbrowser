@@ -42,10 +42,10 @@ class tags_controller(RestController):
         else:
             RenderResponse(self.context,  "FAILED")
             
-    def related(self, q):
+    def related(self, tags):
         results = []
         
-        tagsRaw = q.lower().split(" ")
+        tagsRaw = tags.lower().split(" ")
         
         if len(tagsRaw) == 0 or tagsRaw[0] == "": 
             return RenderResponse(self.context, results)

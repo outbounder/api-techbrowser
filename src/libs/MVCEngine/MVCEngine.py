@@ -933,8 +933,12 @@ class MVCEngine(webapp.RequestHandler):
 
             return do_continue
 
-
-        context = MVCContext(self, self.request.path, self.router, {})
+        urlPath = self.request.path.split("/")
+        lastWord = urlPath[len(urlPath)-1]
+        if(lastWord.rfind(".") != -1):
+            lastWord = lastWord[0:lastWord.rfind(".")]
+        urlPath[len(urlPath)-1] = lastWord
+        context = MVCContext(self, "/".join(urlPath) , self.router, {})
 
         # Load controller
         controller_name = context.controller + "_controller"

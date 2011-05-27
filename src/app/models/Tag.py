@@ -116,12 +116,19 @@ class Tag(db.Expando):
     @staticmethod
     def findRelatedTags(tagsRaw):
         from Entry import Entry
-        entries = Entry.all().filter("tagsRaw IN ",tagsRaw).run()
+        entries = Entry.all().run()
         results = Set()
         for r in entries:
-            for rt in r.tagsRaw:
-                if not rt in tagsRaw:
-                    results.add(rt)
+            foundCount = 0
+            for t in tagsRaw:
+                for rt in r.tagsRaw:
+                    if t == rt:
+                        foundCount += 1
+                        break
+            if foundCount == len(tagsRaw):
+                for rt in r.tagsRaw:
+                    if not rt in tagsRaw:
+                        results.add(rt)
                     
         return sorted(results)
     
