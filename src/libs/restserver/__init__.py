@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 """Rest handler for appengine Models.
 
 To use with an existing application:
@@ -56,6 +55,10 @@ import re
 import base64
 import cgi
 import pickle
+
+from mimetypes import MimeTypes
+mimetypes = MimeTypes()
+mimetypes.add_type("application/json", ".json")
 
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
@@ -1161,7 +1164,7 @@ class Dispatcher(webapp.RequestHandler):
         fetch_page_size: number of instances to return per get-all call (note, App Engine has a builtin limit of 1000)
         
     """
-
+    readUrlExtensionAsContentType = True
     caching = False
     cache_time = 300
     base_url = ""
@@ -1606,6 +1609,9 @@ class Dispatcher(webapp.RequestHandler):
         if(path.startswith(self.base_url)):
             path = path[len(self.base_url):]
         path = [i for i in path.split('/') if i]
+        if self.readUrlExtensionAsContentType:
+            if "." in path[len(path)-1]:
+                path[len(path)-1] = path[len(path)-1].split(".")[0]
         return path
 
     def get_model_handler(self, model_name, method_name, failure_code=404):
@@ -1623,11 +1629,15 @@ class Dispatcher(webapp.RequestHandler):
         return model_handler
 
     def doc_to_output(self, doc):
-
         out_mime_type = self.request.accept.best_match([JSON_CONTENT_TYPE, XML_CONTENT_TYPE])
-        if(out_mime_type == JSON_CONTENT_TYPE):
+        if(out_mime_type == JSON_CONTENT_TYPE or 
+            (self.readUrlExtensionAsContentType and mimetypes.guess_type(self.request.url)[0]==JSON_CONTENT_TYPE)):
             self.response.disp_out_type_ = JSON_CONTENT_TYPE
             return xml_to_json(doc)
+        elif(out_mime_type == XML_CONTENT_TYPE or
+             (self.readUrlExtensionAsContentType and mimetypes.guess_type(self.request.url)[0]==XML_CONTENT_TYPE)):
+            self.response.disp_out_type_ = XML_CONTENT_TYPE
+            return doc.toxml(XML_ENCODING)
         self.response.disp_out_type_ = XML_CONTENT_TYPE
         return doc.toxml(XML_ENCODING)
 

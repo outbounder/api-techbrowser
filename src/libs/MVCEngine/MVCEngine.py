@@ -5,6 +5,8 @@ from google.appengine.api import users
 import logging
 import os
 import sys
+import itertools
+from google.appengine.ext.webapp.util import run_wsgi_app
 
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -863,7 +865,7 @@ class MVCEngine(webapp.RequestHandler):
         """
         try:
             app_module = __import__('app')
-            __appClass = MVCEngine.__classForName('app', namespace=app_module.__dict__)
+            __appClass = MVCEngine.__classForName('App', namespace=app_module.__dict__)
 
             return __appClass
         except ImportError:
@@ -1080,25 +1082,18 @@ class MVCEngine(webapp.RequestHandler):
 
     def options(self, *args):
         self.handle_request(args)
-
-def main():
-    from google.appengine.dist import use_library
-    use_library('django', '1.2')
-
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
-    from django.conf import settings
-    views_path = os.path.join(os.path.dirname(settings.ROOTDIR), 'app', 'views')
-    settings.TEMPLATE_LOADERS = (('gaemvclib.mvctemplateloader.MvcTemplateLoader', views_path), 'django.template.loaders.filesystem.Loader', 'django.template.loaders.app_directories.Loader')
-
-    # The improved routing mechanism comes from the google-app-engine-oil project
-    # (http://code.google.com/p/google-app-engine-oil/) via David Case, who contributed
-    # the idea and a very helpful inital implementation.
-    # Routes are defined in app/app.py in the routes() function.
-    application = webapp.WSGIApplication(
-        [(r'.*', MVCEngine),
-         ], debug=True)
-    wsgiref.handlers.CGIHandler().run(application)
-
-if __name__ == "__main__":
-    main()
+    
+    @staticmethod
+    def createApplication(additionalAppRoutes = [], debug = True):
+    
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+    
+        from django.conf import settings
+        views_path = os.path.join(os.path.dirname(settings.ROOTDIR), 'app', 'views')
+        settings.TEMPLATE_LOADERS = (('gaemvclib.mvctemplateloader.MvcTemplateLoader', views_path), 'django.template.loaders.filesystem.Loader', 'django.template.loaders.app_directories.Loader')
+    
+        # The improved routing mechanism comes from the google-app-engine-oil project
+        # (http://code.google.com/p/google-app-engine-oil/) via David Case, who contributed
+        # the idea and a very helpful inital implementation.
+        # Routes are defined in app/app.py in the routes() function.
+        return webapp.WSGIApplication( itertools.chain(additionalAppRoutes,[(r'.*', MVCEngine)]), debug=debug )
